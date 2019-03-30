@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Pastebin_Scraper.JSON_Classes
 {
@@ -26,6 +24,5 @@ namespace Pastebin_Scraper.JSON_Classes
             public string syntax { get; set; }
             public string user { get; set; }
         }
-
     }
 }
