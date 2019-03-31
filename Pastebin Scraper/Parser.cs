@@ -1,7 +1,38 @@
-﻿namespace Pastebin_Scraper
+﻿using System.Collections.Generic;
+using System.IO;
+
+namespace Pastebin_Scraper
 {
     // The parser class will provide the basic functionality for parsing individual pastes for our predefined search terms
-    internal class Parser
+    internal static class Parser
     {
+        // Static function to parse a list of paste objects, along with a string to search for
+        public static void ParsePastes(List<Pastebin.Paste> pastes, string pattern)
+        {
+            // Initializes new List of strings, for storing URLs later
+            var urlList = new List<string>();
+
+            // Iterates over each paste 
+            foreach (var paste in pastes)
+                // Checks if individual paste contains search pattern string
+                if (paste.content.Contains(pattern))
+                    urlList.Add(paste.scrape_url);
+
+            // Passes list of URLS to function to be saved to text file
+            SavePasteUrls(urlList);
+        }
+
+        // Function to save a list of URLs to a text file
+        private static void SavePasteUrls(List<string> urls)
+        {
+            // Initializes a new disposable stream writer
+            using (var writer = new StreamWriter("output.txt"))
+            {
+                // Iterates over the list of URL strings passed to function
+                foreach (var url in urls)
+                    // Writes the the individual URL to the text file line
+                    writer.WriteLine(url);
+            }
+        }
     }
 }

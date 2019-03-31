@@ -24,6 +24,7 @@ namespace Pastebin_Scraper
             public string title { get; set; }
             public string syntax { get; set; }
             public string user { get; set; }
+            public string content { get; set; }
         }
     }
 }

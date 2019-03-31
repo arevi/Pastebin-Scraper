@@ -6,17 +6,31 @@ using System.Threading;
 namespace Pastebin_Scraper
 {
     // The scraper class provides the necessary functions for scraping the Pastebin API and storing individual pastes into a list
-    internal class Scraper
+    internal class Scraper : IDisposable
     {
-        private readonly HttpClient _client = new HttpClient();
-        private readonly List<string> _pastesList = new List<string>();
+        private readonly HttpClient _client;
+
+        // Private variable declarations
+        private readonly List<Pastebin.Paste> _pastesList = new List<Pastebin.Paste>();
+
+        // Constructor for the Scraper class, allows us to pass in a reusable client rather than initializing a new one repeatedly.
+        public Scraper(HttpClient client)
+        {
+            _client = client;
+        }
+
+        // Allows our class to become disposable
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
 
         // Function to perform get request to Pastebin API, retrieving either valid JSON or failure
         public void FetchPasteList()
         {
             // Assigns our response from the requestHandler function to a string, should return a string of either JSON or NULL
             var jsonData = RequestHandler("https://scrape.pastebin.com/api_scraping.php");
-            
+
             // If the response string is valid, it'll be passed to StorePastes which will extract individual pastes and store them
             if (jsonData != null) StorePastes(Pastebin.BuildPasteList(jsonData));
         }
@@ -44,9 +58,16 @@ namespace Pastebin_Scraper
         }
 
         // Function to accept a Paste object and return the string resolved from the individual paste body of content
-        public string ExtractPaste(Pastebin.Paste paste)
+        public Pastebin.Paste ExtractPaste(Pastebin.Paste paste)
         {
-            return RequestHandler(paste.scrape_url);
+            paste.content = RequestHandler(paste.scrape_url);
+            return paste;
+        }
+
+        // Provides a public method to extract the list of individual paste strings from the scraper object
+        public List<Pastebin.Paste> RetrievePastes()
+        {
+            return _pastesList;
         }
 
         public string RequestHandler(string url)
