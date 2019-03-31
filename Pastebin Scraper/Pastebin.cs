@@ -2,6 +2,7 @@
 
 namespace Pastebin_Scraper
 {
+    // The Pastebin class serves as the outline for deserializing, and returning, the JSON response served from the Pastebin API
     internal class Pastebin
     {
         // Accepts json string, returns Paste[]
