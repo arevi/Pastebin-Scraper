@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Pastebin_Scraper.JSON_Classes
+namespace Pastebin_Scraper
 {
     internal class Pastebin
     {

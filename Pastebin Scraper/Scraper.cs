@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using Pastebin_Scraper.JSON_Classes;
 
 namespace Pastebin_Scraper
 {
@@ -26,20 +25,13 @@ namespace Pastebin_Scraper
 
                 // Checks if response code indicates failure
                 if (!pastebinRes.IsSuccessStatusCode)
-                {
-                    // Prints error message and prints status code of error
                     Console.WriteLine("There was an error processing your request to Pastebin, status code: " +
                                       pastebinRes.StatusCode);
-                }else if (jsonData.Contains("DOES NOT HAVE ACCESS"))
-                {
-                    // Prompts user their IP is not whitelisted
-                    Console.WriteLine("Your IP has not been whitelisted by Pastebin, please visit: https://pastebin.com/doc_scraping_api to get access.");
-                }
+                else if (jsonData.Contains("DOES NOT HAVE ACCESS"))
+                    Console.WriteLine(
+                        "Your IP has not been whitelisted by Pastebin, please visit: https://pastebin.com/doc_scraping_api to get access.");
                 else
-                {
-                    // Valid response, valid data is passed to function to build paste list and store it in list
                     StorePastes(Pastebin.BuildPasteList(jsonData));
-                }
             }
         }
 
